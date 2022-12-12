@@ -721,7 +721,7 @@ binance_new_order <- function(symbol, side, type, time_in_force, quantity, price
 
     # silence "no visible global function/variable definition" R CMD check
     filterType <- minQty <- maxQty <- stepSize <- applyToMarket <- avgPriceMins <- limit <- NULL
-    minNotional <- minPrice <- maxPrice <- tickSize <- multiplierDown <- multiplierUp <- NULL
+    minNotional <- minPrice <- maxPrice <- tickSize <- askMultiplierDown <- askMultiplierUp <- NULL
 
     side <- match.arg(side)
     type <- match.arg(type)
@@ -789,16 +789,16 @@ binance_new_order <- function(symbol, side, type, time_in_force, quantity, price
             stopifnot(abs(quot - round(quot)) < 1e-10)
         }
 
-        if (filters[filterType == 'PERCENT_PRICE', avgPriceMins] == 0) {
+        if (filters[filterType == 'PERCENT_PRICE_BY_SIDE', avgPriceMins] == 0) {
             ref_price <- binance_ticker_price(symbol)$price
         } else {
             ref_price <- binance_avg_price(symbol)
-            stopifnot(ref_price$mins == filters[filterType == 'PERCENT_PRICE', avgPriceMins])
+            stopifnot(ref_price$mins == filters[filterType == 'PERCENT_PRICE_BY_SIDE', avgPriceMins])
             ref_price <- ref_price$price
         }
         stopifnot(
-            price >= ref_price * filters[filterType == 'PERCENT_PRICE', multiplierDown],
-            price <= ref_price * filters[filterType == 'PERCENT_PRICE', multiplierUp]
+            price >= ref_price * filters[filterType == 'PERCENT_PRICE_BY_SIDE', askMultiplierDown],
+            price <= ref_price * filters[filterType == 'PERCENT_PRICE_BY_SIDE', askmultiplierUp]
         )
 
         stopifnot(price * quantity >= filters[filterType == 'MIN_NOTIONAL', minNotional])
