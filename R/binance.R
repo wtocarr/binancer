@@ -798,7 +798,7 @@ binance_new_order <- function(symbol, side, type, time_in_force, quantity, price
         }
         stopifnot(
             price >= ref_price * filters[filterType == 'PERCENT_PRICE_BY_SIDE', askMultiplierDown],
-            price <= ref_price * filters[filterType == 'PERCENT_PRICE_BY_SIDE', askmultiplierUp]
+            price <= ref_price * filters[filterType == 'PERCENT_PRICE_BY_SIDE', askMultiplierUp]
         )
 
         stopifnot(price * quantity >= filters[filterType == 'MIN_NOTIONAL', minNotional])
